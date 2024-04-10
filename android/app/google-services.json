@@ -1,0 +1,124 @@
+{
+  "project_info": {
+    "project_number": "959257585633",
+    "project_id": "pblproject-b8b41",
+    "storage_bucket": "pblproject-b8b41.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959257585633:android:7736f18cfaba0eda1e54a0",
+        "android_client_info": {
+          "package_name": "com.example.HOME"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqdtLLna3SQdjD9F_jGKUNi4D6rR2MykU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959257585633:android:a1fd234baa3dc87c1e54a0",
+        "android_client_info": {
+          "package_name": "com.example.Home"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqdtLLna3SQdjD9F_jGKUNi4D6rR2MykU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959257585633:android:c5b64050120ffd961e54a0",
+        "android_client_info": {
+          "package_name": "com.example.newp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqdtLLna3SQdjD9F_jGKUNi4D6rR2MykU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959257585633:android:dae9871b8a3a52f71e54a0",
+        "android_client_info": {
+          "package_name": "com.example.pbl_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqdtLLna3SQdjD9F_jGKUNi4D6rR2MykU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959257585633:android:999a1d06b7aabbf81e54a0",
+        "android_client_info": {
+          "package_name": "com.example.pomodoro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqdtLLna3SQdjD9F_jGKUNi4D6rR2MykU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959257585633:android:7018d1272ce7f17b1e54a0",
+        "android_client_info": {
+          "package_name": "com.mycompany.studyplanner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqdtLLna3SQdjD9F_jGKUNi4D6rR2MykU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
