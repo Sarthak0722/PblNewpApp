@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Import DateFormat class
+import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -7,7 +7,7 @@ class Task {
   String title;
   bool isCompleted;
   DateTime? dueDate;
-  TimeOfDay? dueTime; // New field for due time
+  TimeOfDay? dueTime;
   Priority priority;
   String id;
 
@@ -15,7 +15,7 @@ class Task {
     required this.title,
     this.isCompleted = false,
     this.dueDate,
-    this.dueTime, // Initialize dueTime to null
+    this.dueTime,
     this.priority = Priority.low,
     required this.id,
   });
@@ -64,8 +64,8 @@ class _ToDoListPageState extends State<ToDoListPage> {
             dueTime: data['dueTime'] != null
                 ? TimeOfDay.fromDateTime(DateTime.parse(data['dueTime']))
                 : null,
-            priority: Priority.values.firstWhere(
-                (e) => e.toString() == data['priority']),
+            priority: Priority.values
+                .firstWhere((e) => e.toString() == data['priority']),
             id: doc.id,
           );
         }).toList();
@@ -75,10 +75,31 @@ class _ToDoListPageState extends State<ToDoListPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Task> highPriorityTasks = [];
+    List<Task> mediumPriorityTasks = [];
+    List<Task> lowPriorityTasks = [];
+
+    for (Task task in tasks) {
+      if (task.priority == Priority.high) {
+        highPriorityTasks.add(task);
+      } else if (task.priority == Priority.medium) {
+        mediumPriorityTasks.add(task);
+      } else {
+        lowPriorityTasks.add(task);
+      }
+    }
+
+    highPriorityTasks.sort((a, b) =>
+        (a.dueDate ?? DateTime(0)).compareTo(b.dueDate ?? DateTime(0)));
+    mediumPriorityTasks.sort((a, b) =>
+        (a.dueDate ?? DateTime(0)).compareTo(b.dueDate ?? DateTime(0)));
+    lowPriorityTasks.sort((a, b) =>
+        (a.dueDate ?? DateTime(0)).compareTo(b.dueDate ?? DateTime(0)));
+
     return Scaffold(
       appBar: AppBar(
         title: Text('To-Do List'),
-        backgroundColor: Colors.deepPurple, // Set app bar color here
+        backgroundColor: Colors.deepPurple,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -86,50 +107,22 @@ class _ToDoListPageState extends State<ToDoListPage> {
           },
         ),
       ),
-      backgroundColor: Colors.purple.shade50, // Set background color here
-      body: ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context, index) {
-          final task = tasks[index];
-          return ListTile(
-            title: Text(task.title),
-            subtitle: task.dueDate != null
-                ? Text('Due Date: ${DateFormat('dd-MM-yyyy').format(task.dueDate!)}' +
-                    (task.dueTime != null
-                        ? '\nDue Time: ${task.dueTime!.format(context)}'
-                        : '\nPriority: ${Priority}')
-                        )
-                : null,
-            leading: Checkbox(
-              value: task.isCompleted,
-              onChanged: (value) {
-                setState(() {
-                  task.isCompleted = value!;
-                  _updateTask(task);
-                });
-              },
-            ),
-            trailing: IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                setState(() {
-                  _deleteTask(task.id);
-                });
-              },
-            ),
-            onTap: () async {
-              Task? updatedTask = await showDialog<Task>(
-                context: context,
-                builder: (context) => TaskDialog(task: task),
-              );
-              if (updatedTask != null) {
-                setState(() {
-                  _updateTask(updatedTask);
-                });
-              }
-            },
-          );
-        },
+      backgroundColor: Colors.purple.shade50,
+      body: ListView(
+        children: [
+          if (highPriorityTasks.isNotEmpty) ...[
+            _buildPrioritySection('High Priority', highPriorityTasks),
+            Divider(),
+          ],
+          if (mediumPriorityTasks.isNotEmpty) ...[
+            _buildPrioritySection('Medium Priority', mediumPriorityTasks),
+            Divider(),
+          ],
+          if (lowPriorityTasks.isNotEmpty) ...[
+            _buildPrioritySection('Low Priority', lowPriorityTasks),
+            Divider(),
+          ],
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -148,25 +141,89 @@ class _ToDoListPageState extends State<ToDoListPage> {
     );
   }
 
+  Widget _buildPrioritySection(String title, List<Task> tasks) {
+    return SingleChildScrollView(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: tasks.length,
+          itemBuilder: (context, index) {
+            final task = tasks[index];
+            return Card(
+              elevation: 3,
+              shadowColor: Colors.grey,
+              child: ListTile(
+                title: Text(task.title),
+                subtitle: task.dueDate != null
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              'Due Date: ${DateFormat('dd-MM-yyyy').format(task.dueDate!)}'),
+                          if (task.dueTime != null)
+                            Text('Due Time: ${task.dueTime!.format(context)}'),
+                        ],
+                      )
+                    : null,
+                leading: Checkbox(
+                  value: task.isCompleted,
+                  onChanged: (value) {
+                    setState(() {
+                      task.isCompleted = value!;
+                      _updateTask(task);
+                    });
+                  },
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    setState(() {
+                      _deleteTask(task.id);
+                    });
+                  },
+                ),
+                onTap: () async {
+                  Task? updatedTask = await showDialog<Task>(
+                    context: context,
+                    builder: (context) => TaskDialog(task: task),
+                  );
+                  if (updatedTask != null) {
+                    setState(() {
+                      _updateTask(updatedTask);
+                    });
+                  }
+                },
+              ),
+            );
+          },
+        ),
+      ],
+    ));
+  }
+
   void _addTask(Task newTask) {
-    tasksCollection
-        .doc(currentUserUID)
-        .collection('tasks')
-        .add({
-          'title': newTask.title,
-          'isCompleted': newTask.isCompleted,
-          'dueDate': newTask.dueDate,
-          'dueTime': newTask.dueTime != null
-              ? newTask.dueTime!.format(context)
-              : null,
-          'priority': newTask.priority.toString(),
-        })
-        .then((docRef) {
-          newTask.id = docRef.id;
-          setState(() {
-            tasks.add(newTask);
-          });
-        });
+    tasksCollection.doc(currentUserUID).collection('tasks').add({
+      'title': newTask.title,
+      'isCompleted': newTask.isCompleted,
+      'dueDate': newTask.dueDate,
+      'dueTime':
+          newTask.dueTime != null ? newTask.dueTime!.format(context) : null,
+      'priority': newTask.priority.toString(),
+    }).then((docRef) {
+      newTask.id = docRef.id;
+      setState(() {
+        tasks.add(newTask);
+      });
+    });
   }
 
   void _updateTask(Task task) {
@@ -175,14 +232,12 @@ class _ToDoListPageState extends State<ToDoListPage> {
         .collection('tasks')
         .doc(task.id)
         .update({
-          'title': task.title,
-          'isCompleted': task.isCompleted,
-          'dueDate': task.dueDate,
-          'dueTime': task.dueTime != null
-              ? task.dueTime!.format(context)
-              : null,
-          'priority': task.priority.toString(),
-        });
+      'title': task.title,
+      'isCompleted': task.isCompleted,
+      'dueDate': task.dueDate,
+      'dueTime': task.dueTime != null ? task.dueTime!.format(context) : null,
+      'priority': task.priority.toString(),
+    });
   }
 
   void _deleteTask(String taskId) {
@@ -211,15 +266,14 @@ class TaskDialog extends StatefulWidget {
 class _TaskDialogState extends State<TaskDialog> {
   late TextEditingController _titleController;
   late DateTime? _dueDate;
-  late TimeOfDay? _dueTime; // New field for due time
+  late TimeOfDay? _dueTime;
   late Priority _priority;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _titleController =
-        TextEditingController(text: widget.task?.title ?? '');
+    _titleController = TextEditingController(text: widget.task?.title ?? '');
     _dueDate = widget.task?.dueDate;
     _dueTime = widget.task?.dueTime;
     _priority = widget.task?.priority ?? Priority.low;
@@ -227,116 +281,123 @@ class _TaskDialogState extends State<TaskDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(widget.task == null ? 'Add Task' : 'Edit Task'),
-      content: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              controller: _titleController,
-              decoration: InputDecoration(labelText: 'Task Title'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a title';
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 16),
-            Row(
-              children: [
-                Text('Due Date: '),
-                TextButton(
-                  onPressed: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(2100),
-                    );
-                    if (pickedDate != null) {
+    return SingleChildScrollView(
+      child: Container(
+        child: Column(children: [
+          SizedBox(height: 120),
+          AlertDialog(
+            title: Text(widget.task == null ? 'Add Task' : 'Edit Task'),
+            content: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: _titleController,
+                    decoration: InputDecoration(labelText: 'Task Title'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a title';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Text('Due Date: '),
+                      TextButton(
+                        onPressed: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2100),
+                          );
+                          if (pickedDate != null) {
+                            setState(() {
+                              _dueDate = pickedDate;
+                            });
+                          }
+                        },
+                        child: Text(_dueDate == null
+                            ? 'Select Due Date'
+                            : '${DateFormat('dd-MM-yyyy').format(_dueDate!)}'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Text('Due Time: '),
+                      TextButton(
+                        onPressed: () async {
+                          TimeOfDay? pickedTime = await showTimePicker(
+                            context: context,
+                            initialTime: _dueTime ?? TimeOfDay.now(),
+                          );
+                          if (pickedTime != null) {
+                            setState(() {
+                              _dueTime = pickedTime;
+                            });
+                          }
+                        },
+                        child: Text(_dueTime == null
+                            ? 'Select Due Time'
+                            : '${_dueTime!.hour}:${_dueTime!.minute}'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  DropdownButtonFormField<Priority>(
+                    value: _priority,
+                    onChanged: (value) {
                       setState(() {
-                        _dueDate = pickedDate;
+                        _priority = value!;
                       });
-                    }
-                  },
-                  child: Text(_dueDate == null
-                      ? 'Select Due Date'
-                      : '${DateFormat('dd-MM-yyyy').format(_dueDate!)}'),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Row(
-              children: [
-                Text('Due Time: '),
-                TextButton(
-                  onPressed: () async {
-                    TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: _dueTime ?? TimeOfDay.now(),
-                    );
-                    if (pickedTime != null) {
-                      setState(() {
-                        _dueTime = pickedTime;
-                      });
-                    }
-                  },
-                  child: Text(_dueTime == null
-                      ? 'Select Due Time'
-                      : '${_dueTime!.hour}:${_dueTime!.minute}'),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            DropdownButtonFormField<Priority>(
-              value: _priority,
-              onChanged: (value) {
-                setState(() {
-                  _priority = value!;
-                });
-              },
-              items: Priority.values.map((priority) {
-                return DropdownMenuItem(
-                  value: priority,
-                  child: Text(priority.toString().split('.').last),
-                );
-              }).toList(),
-              decoration: InputDecoration(
-                labelText: 'Priority',
-                border: OutlineInputBorder(),
+                    },
+                    items: Priority.values.map((priority) {
+                      return DropdownMenuItem(
+                        value: priority,
+                        child: Text(priority.toString().split('.').last),
+                      );
+                    }).toList(),
+                    decoration: InputDecoration(
+                      labelText: 'Priority',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.pop(
+                      context,
+                      Task(
+                        title: _titleController.text,
+                        dueDate: _dueDate,
+                        dueTime: _dueTime,
+                        priority: _priority,
+                        id: widget.task?.id ?? '',
+                      ),
+                    );
+                  }
+                },
+                child: Text(widget.task == null ? 'Add' : 'Update'),
+              ),
+            ],
+          ),
+        ]),
       ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              Navigator.pop(
-                context,
-                Task(
-                  title: _titleController.text,
-                  dueDate: _dueDate,
-                  dueTime: _dueTime,
-                  priority: _priority,
-                  id: widget.task?.id ?? '',
-                ),
-              );
-            }
-          },
-          child: Text(widget.task == null ? 'Add' : 'Update'),
-        ),
-      ],
     );
   }
 }
