@@ -140,7 +140,7 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
         children: [
           TableCalendar(
             firstDay: DateTime(2022),
-            lastDay: DateTime(2023, 12, 31), // Updated last day
+            lastDay: DateTime(2024, 12, 31), // Updated last day
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
             onDaySelected: (selectedDay, focusedDay) {
