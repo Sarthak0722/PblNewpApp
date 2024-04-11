@@ -32,7 +32,8 @@ class NotesPage extends StatelessWidget {
 
           return ListView(
             children: snapshot.data!.docs.map((document) {
-              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+              Map<String, dynamic> data =
+                  document.data() as Map<String, dynamic>;
               return NoteCard(
                 note: Note(
                   id: document.id,
@@ -129,7 +130,8 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                 ),
               ),
               keyboardType: TextInputType.text, // Set keyboard type to text
-              textInputAction: TextInputAction.done, // Set text input action to done
+              textInputAction:
+                  TextInputAction.done, // Set text input action to done
               enableSuggestions: true, // Enable word suggestions
               autocorrect: true, // Enable autocorrect
             ),
@@ -141,8 +143,8 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
               },
               child: Text('Save'),
               style: ElevatedButton.styleFrom(
-                primary: Colors.deepPurple,
-                onPrimary: Colors.white,
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.deepPurple,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
