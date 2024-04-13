@@ -179,6 +179,7 @@ void main() {
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:newp/homescreen.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key});
@@ -191,7 +192,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final _auth = FirebaseAuth.instance;
   String? email;
   String? password;
-  bool _obscurePassword = true; // Variable to toggle password visibility
+  bool _obscurePassword = true;
+  bool _isLoading = false; // Variable to toggle password visibility
 
   @override
   Widget build(BuildContext context) {
@@ -279,67 +281,69 @@ class _SignUpPageState extends State<SignUpPage> {
                         color: Color.fromARGB(255, 134, 3,
                             248)), // Set the border color to purple
                   ),
-                  child: ElevatedButton(
+                  child: _isLoading
+      ? Center(
+          child: CircularProgressIndicator(),
+        ): ElevatedButton(
                     onPressed: () async {
-                      // Check if email and password are not empty
-                      if (email == null ||
-                          email!.isEmpty ||
-                          password == null ||
-                          password!.isEmpty) {
-                        // Show a snackbar or dialog to inform the user about the empty fields
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          elevation: 0,
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.transparent,
-                          content: AwesomeSnackbarContent(
-                            title: 'OOPS!',
-                            message: 'Enter all fields',
-                            contentType: ContentType.failure,
-                          ),
-                        ));
-                        return; // Exit the function early
-                      }
+  // Check if email and password are not empty
+  if (email == null || email!.isEmpty || password == null || password!.isEmpty) {
+    // Show a snackbar or dialog to inform the user about the empty fields
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'OOPS!',
+        message: 'Enter all fields',
+        contentType: ContentType.failure,
+      ),
+    ));
+    return;
+  }
 
-                      // Validate email format
-                      final emailRegex =
-                          RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                      if (!emailRegex.hasMatch(email!)) {
-                        // Show a snackbar or dialog to inform the user about the invalid email format
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          elevation: 0,
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.transparent,
-                          content: AwesomeSnackbarContent(
-                            title: 'OOPS!',
-                            message: 'Enter a valid email-id',
-                            contentType: ContentType.failure,
-                          ),
-                        ));
-                        return; // Exit the function early
-                      }
+  // Validate email format
+  final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  if (!emailRegex.hasMatch(email!)) {
+    // Show a snackbar or dialog to inform the user about the invalid email format
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Please enter a valid email address.'),
+      ),
+    );
+    return;
+  }
 
-                      // Proceed with user registration
-                      try {
-                        final newUser =
-                            await _auth.createUserWithEmailAndPassword(
-                          email: email!,
-                          password: password!,
-                        );
-                        // Handle successful registration, e.g., navigate to another screen
-                      } catch (e) {
-                        // Handle any registration errors, e.g., display error message
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          elevation: 0,
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.transparent,
-                          content: AwesomeSnackbarContent(
-                            title: 'Registration failed',
-                            message: 'Please try again',
-                            contentType: ContentType.failure,
-                          ),
-                        ));
-                      }
-                    },
+  try {
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Proceed with user registration
+    final newUser = await _auth.createUserWithEmailAndPassword(
+      email: email!,
+      password: password!,
+    );
+
+    // Handle successful registration, e.g., navigate to another screen
+    // ...
+    Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => Home()), // Replace 'HomePage' with your actual home page widget
+  );
+  } catch (e) {
+    // Handle any registration errors, e.g., display error message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Registration failed. Please try again later.'),
+      ),
+    );
+  } finally {
+    setState(() {
+      _isLoading = false;
+    });
+  }
+},
                     child: Text(
                       "Register",
                       style: TextStyle(

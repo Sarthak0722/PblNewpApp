@@ -6,7 +6,6 @@ import 'package:newp/pomodoro.dart';
 import 'package:newp/event_calendar.dart';
 import 'package:newp/timetablePage.dart';
 import 'package:newp/todolistPage.dart';
-import 'package:newp/event_calendar.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -187,7 +186,7 @@ class Home extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => DocumentUploadScreen()),
+                          MaterialPageRoute(builder: (context) => HabitTrackerPage()),
                         );
                       },
                       child: Container(

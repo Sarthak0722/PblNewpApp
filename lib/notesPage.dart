@@ -3,17 +3,34 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+void main() {
+  runApp(MaterialApp(
+    home: NotesPage(),
+  ));
+}
+
 class NotesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Student Notes'),
-        backgroundColor: Colors.deepPurple,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 166, 19, 240),
+                Color.fromARGB(255, 110, 23, 233)
+              ], // Your gradient colors
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('students')
+            .collection('users')
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .collection('notes')
             .snapshots(),
@@ -167,7 +184,7 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
   void _saveNote() {
     if (widget.note == null) {
       FirebaseFirestore.instance
-          .collection('students')
+          .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('notes')
           .add({
@@ -176,7 +193,7 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
       });
     } else {
       FirebaseFirestore.instance
-          .collection('students')
+          .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('notes')
           .doc(widget.note!.id)
@@ -310,7 +327,7 @@ class _NoteCardState extends State<NoteCard> {
 
   void _deleteNote() {
     FirebaseFirestore.instance
-        .collection('students')
+        .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('notes')
         .doc(widget.note.id)
@@ -334,7 +351,7 @@ class _NoteCardState extends State<NoteCard> {
 
   void _saveChanges() {
     FirebaseFirestore.instance
-        .collection('students')
+        .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('notes')
         .doc(widget.note.id)
@@ -362,10 +379,4 @@ class _NoteCardState extends State<NoteCard> {
       );
     });
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: NotesPage(),
-  ));
 }

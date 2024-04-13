@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart'; // Import Firebase core package
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:newp/login_page.dart';
-import 'package:newp/event_calendar.dart';
 import 'package:newp/homescreen.dart';
 import 'package:provider/provider.dart';
 import 'package:newp/widgets/timerservice.dart';
+import 'api/firebase_api.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +21,9 @@ void main() async {
               appId: '1:959257585633:android:7736f18cfaba0eda1e54a0',
               messagingSenderId: '959257585633',
               projectId: 'pblproject-b8b41'))
-      : await Firebase.initializeApp(); // Initialize Firebase app
+      : await Firebase.initializeApp();
+  await FirebaseApi().initNotifications();
+  await Hive.initFlutter(); // Initialize Firebase app
   runApp(ChangeNotifierProvider(
     create: (context) => timerservice(),
     child: MyApp(),

@@ -9,13 +9,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Timetable',
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(
-          color: Colors.purple,
-        ),
-      ),
       home: TimetablePage(),
       debugShowCheckedModeBanner: false,
     );
@@ -45,6 +38,18 @@ class _TimetablePageState extends State<TimetablePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Timetable'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 166, 19, 240),
+                Color.fromARGB(255, 110, 23, 233)
+              ], // Your gradient colors
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -71,7 +76,7 @@ class _TimetablePageState extends State<TimetablePage> {
                         ],
                       ),
                       child: DataTable(
-                        headingRowColor: MaterialStateColor.resolveWith((states) => Colors.blue),
+                        headingRowColor: MaterialStateColor.resolveWith((states) => Color.fromARGB(255, 151, 142, 135)),
                         columns: List.generate(
                           timetable[0].length,
                           (index) => DataColumn(
@@ -184,4 +189,3 @@ class _TimetablePageState extends State<TimetablePage> {
     );
   }
 }
-

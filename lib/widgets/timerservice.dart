@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:newp/usage.dart';
 import 'timeroptions.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class timerservice extends ChangeNotifier {
   late Timer timer;
@@ -12,10 +13,13 @@ class timerservice extends ChangeNotifier {
   int goals = 0;
   String currentstate = 'FOCUS';
 
+  final Player = AudioPlayer();
+
   void start() {
     timerplaying = true;
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) async {
       if (currentDuration == 0) {
+        await playSound(); // Wait for the sound to finish playing
         handlenextround();
       } else {
         currentDuration--;
@@ -59,5 +63,10 @@ class timerservice extends ChangeNotifier {
     selectedTime = seconds;
     currentDuration = seconds;
     notifyListeners();
+  }
+
+  Future<void> playSound() async {
+    String audioPath = "sounds/alarm.mp3";
+    await Player.play(AssetSource(audioPath));
   }
 }
