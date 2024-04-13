@@ -186,7 +186,7 @@ class Home extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HabitTrackerPage()),
+                          MaterialPageRoute(builder: (context) => DocumentUploadScreen()),
                         );
                       },
                       child: Container(
