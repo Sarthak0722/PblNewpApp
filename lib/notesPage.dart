@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +15,8 @@ class NotesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Student Notes'),
+        title: Text('Student Notes',
+            style: TextStyle(fontFamily: 'school', fontSize: 40)),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -115,59 +117,69 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.note == null ? 'Create Note' : 'Edit Note'),
+        title: Text(
+          widget.note == null ? 'Create Note' : 'Edit Note',
+          style: TextStyle(fontFamily: 'school', fontSize: 40),
+        ),
         backgroundColor: Colors.deepPurple,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText: 'Title',
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  labelText: 'Title',
+                  labelStyle: TextStyle(fontFamily: 'school', fontSize: 40),
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 12.0),
-            TextField(
-              controller: _contentController,
-              maxLines: null,
-              decoration: InputDecoration(
-                labelText: 'Content',
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+              SizedBox(height: 12.0),
+              TextField(
+                controller: _contentController,
+                maxLines: null,
+                decoration: InputDecoration(
+                  labelText: 'Content',
+                  labelStyle: TextStyle(fontFamily: 'school', fontSize: 40),
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                keyboardType: TextInputType.text, // Set keyboard type to text
+                textInputAction:
+                    TextInputAction.done, // Set text input action to done
+                enableSuggestions: true, // Enable word suggestions
+                autocorrect: true, // Enable autocorrect
+              ),
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  _saveNote();
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Save',
+                  style: TextStyle(fontFamily: 'school', fontSize: 40),
+                ),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.deepPurple,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                 ),
               ),
-              keyboardType: TextInputType.text, // Set keyboard type to text
-              textInputAction:
-                  TextInputAction.done, // Set text input action to done
-              enableSuggestions: true, // Enable word suggestions
-              autocorrect: true, // Enable autocorrect
-            ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                _saveNote();
-                Navigator.pop(context);
-              },
-              child: Text('Save'),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.deepPurple,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -250,6 +262,7 @@ class _NoteCardState extends State<NoteCard> {
                     controller: _titleEditingController,
                     decoration: InputDecoration(
                       labelText: 'Title',
+                      labelStyle: TextStyle(fontFamily: 'school', fontSize: 40),
                     ),
                   ),
                   SizedBox(height: 8.0),
@@ -257,7 +270,10 @@ class _NoteCardState extends State<NoteCard> {
               )
             : Text(
                 editedTitle,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 30,
+                    fontFamily: 'school',
+                    fontWeight: FontWeight.bold),
               ),
         children: [
           Padding(
@@ -271,6 +287,8 @@ class _NoteCardState extends State<NoteCard> {
                         maxLines: null,
                         decoration: InputDecoration(
                           labelText: 'Content',
+                          labelStyle:
+                              TextStyle(fontFamily: 'school', fontSize: 30),
                         ),
                       ),
                       SizedBox(height: 8.0),
@@ -293,7 +311,7 @@ class _NoteCardState extends State<NoteCard> {
                     children: [
                       Text(
                         editedContent,
-                        style: TextStyle(fontSize: 16.0),
+                        style: TextStyle(fontFamily: 'school', fontSize: 25.0),
                       ),
                       SizedBox(height: 8.0),
                       Row(
@@ -333,19 +351,27 @@ class _NoteCardState extends State<NoteCard> {
         .doc(widget.note.id)
         .delete()
         .then((value) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Note deleted successfully'),
-          backgroundColor: Colors.green,
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'GG',
+          message: 'Note deleted successfully',
+          contentType: ContentType.success,
         ),
-      );
+      ));
     }).catchError((error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to delete note'),
-          backgroundColor: Colors.red,
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'OOPS!',
+          message: 'Failed to delete note',
+          contentType: ContentType.failure,
         ),
-      );
+      ));
     });
   }
 
@@ -364,19 +390,27 @@ class _NoteCardState extends State<NoteCard> {
         editedTitle = _titleEditingController.text;
         editedContent = _contentEditingController.text;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Note updated successfully'),
-          backgroundColor: Colors.green,
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: '',
+          message: 'Note updated successfully',
+          contentType: ContentType.success,
         ),
-      );
+      ));
     }).catchError((error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to update note'),
-          backgroundColor: Colors.red,
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'OOPS!',
+          message: 'Failed to update note',
+          contentType: ContentType.failure,
         ),
-      );
+      ));
     });
   }
 }

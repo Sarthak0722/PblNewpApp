@@ -15,15 +15,26 @@ class Home extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[200],
         appBar: AppBar(
-          backgroundColor: const Color(0xFF9139EF),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromARGB(255, 166, 19, 240),
+                  Color.fromARGB(255, 110, 23, 233)
+                ], // Your gradient colors
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
           title: const Text(
             'HOME',
             style: TextStyle(
-              fontFamily: 'Readex Pro',
+              fontFamily: 'school',
               color: Colors.white,
-              fontSize: 26,
+              fontSize: 40,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -42,303 +53,160 @@ class Home extends StatelessWidget {
         ),
         body: SafeArea(
           top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 25, 0, 0),
-                child: Text(
-                  'STUDY',
-                  style: TextStyle(
-                    fontFamily: 'Roboto Slab',
-                    fontSize: 21,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black, // Change according to your theme
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ToDoListPage()),
-                        );
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.28,
-                        height: MediaQuery.of(context).size.width * 0.28,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.network(
-                          'https://th.bing.com/th/id/OIP.A7sVZIbg-4T39zQmN6Ak5AHaHa?w=196&h=196&c=7&r=0&o=5&dpr=1.5&pid=1.7',
-                          fit: BoxFit.cover,
-                        ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildSectionTitle('PRODUCTIVITY HUB'),
+                _buildFeatureRow(
+                  context,
+                  [
+                    _buildFeatureItem(
+                      context,
+                      title: 'To-Do List',
+                      imageUrl: 'assets/images/todo.png',
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ToDoListPage()),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Pomodoro()), // Navigate to Pomodoro Timer page
-                          );
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.28,
-                          height: MediaQuery.of(context).size.width * 0.28,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: Image.network(
-                            'https://th.bing.com/th/id/OIP.aR2rlMSlqQqrJytQJLuzswAAAA?w=182&h=181&c=7&r=0&o=5&dpr=1.5&pid=1.7',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                    _buildFeatureItem(
+                      context,
+                      title: 'Pomodoro Timer',
+                      imageUrl: 'assets/images/pomo.png',
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Pomodoro()),
                       ),
                     ),
-                    InkWell(
-                      onTap: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => NotesPage()), // Navigate to Notes page
-                        );
-                        // Navigation logic
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.28,
-                        height: MediaQuery.of(context).size.width * 0.28,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.network(
-                          'https://th.bing.com/th/id/OIP.WsOyXysnvuLy2RO7G72t5QHaHZ?rs=1&pid=ImgDetMain',
-                          fit: BoxFit.cover,
-                        ),
+                    _buildFeatureItem(
+                      context,
+                      title: 'Notes',
+                      imageUrl: 'assets/images/note.png',
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NotesPage()),
                       ),
                     ),
                   ],
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'To-Do List',
-                      style: TextStyle(
-                        // Adjust the style according to your theme
+                _buildFeatureRow(
+                  context,
+                  [
+                    _buildFeatureItem(
+                      context,
+                      title: 'Timetable',
+                      imageUrl: 'assets/images/tt.png',
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TimetablePage()),
                       ),
                     ),
-                    Text(
-                      'Pomodoro Timer',
-                      style: TextStyle(
-                        // Adjust the style according to your theme
+                    _buildFeatureItem(
+                      context,
+                      title: 'Documents',
+                      imageUrl: 'assets/images/doc.png',
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DocumentUploadScreen()),
                       ),
                     ),
-                    Text(
-                      'Notes',
-                      style: TextStyle(
-                        // Adjust the style according to your theme
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => TimetablePage()),
-                        );
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.28,
-                        height: MediaQuery.of(context).size.width * 0.28,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.network(
-                          'https://th.bing.com/th/id/OIP.o1EUCY0lryB4IqNs4jadHAHaHa?w=175&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => DocumentUploadScreen()),
-                        );
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.28,
-                        height: MediaQuery.of(context).size.width * 0.28,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.network(
-                          'https://th.bing.com/th/id/OIP.Od_LqdiuldcEnXh8ZZUSLQHaHa?w=201&h=201&c=7&r=0&o=5&dpr=1.5&pid=1.7',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => EventCalendarScreen()),
-                        );
-                        // Navigation logic
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.28,
-                        height: MediaQuery.of(context).size.width * 0.28,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.network(
-                          'https://th.bing.com/th/id/OIP.tmV4tdGt-3-ZucXd0JqlbgHaFj?w=272&h=203&c=7&r=0&o=5&dpr=1.5&pid=1.7',
-                          fit: BoxFit.cover,
-                        ),
+                    _buildFeatureItem(
+                      context,
+                      title: 'Event Calendar',
+                      imageUrl: 'assets/images/sc.png',
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EventCalendarScreen()),
                       ),
                     ),
                   ],
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'Timetable',
-                      style: TextStyle(
-                        // Adjust the style according to your theme
-                      ),
-                    ),
-                    Text(
-                      'Documents',
-                      style: TextStyle(
-                        // Adjust the style according to your theme
-                      ),
-                    ),
-                    Text(
-                      'Schedule',
-                      style: TextStyle(
-                        // Adjust the style according to your theme
-                      ),
-                    ),
-                  ],
+                const SizedBox(height: 20),
+                _buildSectionTitle('STRESS MANAGEMENT '),
+                _buildFeatureItem(
+                  context,
+                  title: 'Stress Relief',
+                  imageUrl: 'assets/images/med.png',
+                  onTap: () {
+                    // Implement stress relief feature
+                  },
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                child: Text(
-                  'Stress Management',
-                  style: TextStyle(
-                    fontFamily: 'Roboto Slab',
-                    fontSize: 21,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black, // Change according to your theme
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.28,
-                      height: MediaQuery.of(context).size.width * 0.28,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: Image.network(
-                        'https://th.bing.com/th/id/OIP.LUxy_CA22wg3-LEpmANsEQHaID?w=163&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.28,
-                      height: MediaQuery.of(context).size.width * 0.28,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: Image.network(
-                        'https://th.bing.com/th/id/OIP.6jLKpYKHuRszNY0La9F2wAHaGo?w=193&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.28,
-                      height: MediaQuery.of(context).size.width * 0.28,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: Image.network(
-                        'https://th.bing.com/th/id/OIP.5cauMYIrsQyeCyDLEucp5QHaGc?w=231&h=202&c=7&r=0&o=5&dpr=1.5&pid=1.7',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'Meditation\nSounds',
-                      style: TextStyle(
-                        // Adjust the style according to your theme
-                      ),
-                    ),
-                    Text(
-                      'Meditation\nTimer',
-                      style: TextStyle(
-                        // Adjust the style according to your theme
-                      ),
-                    ),
-                    Text(
-                      'Stress Relief\nTechniques',
-                      style: TextStyle(
-                        // Adjust the style according to your theme
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, top: 3),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontFamily: 'school',
+          fontSize: 40,
+          fontWeight: FontWeight.w500,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureRow(BuildContext context, List<Widget> items) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: items,
+      ),
+    );
+  }
+
+  Widget _buildFeatureItem(BuildContext context,
+      {required String title,
+      required String imageUrl,
+      required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        elevation: 4,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.28,
+              height: MediaQuery.of(context).size.width * 0.28,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.asset(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'school',
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

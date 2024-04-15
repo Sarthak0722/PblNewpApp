@@ -86,6 +86,13 @@ flutter:
     - assets/sounds/alarm.mp3
     - assets/images/waiting.png
     - assets/images/pic.png
+    - assets/images/note.png
+    - assets/images/pomo.png
+    - assets/images/todo.png
+    - assets/images/tt.png
+    - assets/images/doc.png
+    - assets/images/med.png
+    - assets/images/sc.png
     
 
 

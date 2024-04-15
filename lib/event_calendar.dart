@@ -118,30 +118,32 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
           'Edit/Delete Event',
           textAlign: TextAlign.center,
         ),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: titleController,
-              textCapitalization: TextCapitalization.words,
-              decoration: const InputDecoration(
-                labelText: 'Title',
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: titleController,
+                textCapitalization: TextCapitalization.words,
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                ),
               ),
-            ),
-            TextField(
-              controller: descpController,
-              textCapitalization: TextCapitalization.words,
-              decoration: const InputDecoration(labelText: 'Description'),
-            ),
-            // Added for event time
-            ListTile(
-              title: Text(
-                'Event Time: ${event['eventTime']}',
-                textAlign: TextAlign.center,
+              TextField(
+                controller: descpController,
+                textCapitalization: TextCapitalization.words,
+                decoration: const InputDecoration(labelText: 'Description'),
               ),
-            ),
-          ],
+              // Added for event time
+              ListTile(
+                title: Text(
+                  'Event Time: ${event['eventTime']}',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(
@@ -215,57 +217,59 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          TableCalendar(
-            firstDay: DateTime(2022),
-            lastDay: DateTime(2024, 12, 31),
-            focusedDay: _focusedDay,
-            calendarFormat: _calendarFormat,
-            onDaySelected: (selectedDay, focusedDay) {
-              if (!isSameDay(_selectedDate, selectedDay)) {
-                setState(() {
-                  _selectedDate = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-              }
-            },
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDate, day);
-            },
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
-            },
-            onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
-            },
-            eventLoader: _listOfDayEvents,
-          ),
-          ..._listOfDayEvents(_selectedDate!).map(
-            (myEvents) => ListTile(
-              onTap: () => _showEditDeleteEventDialog(myEvents),
-              leading: const Icon(
-                Icons.done,
-                color: Colors.teal,
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text('Event Title:   ${myEvents['eventTitle']}'),
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Description:   ${myEvents['eventDescp']}'),
-                  Text('Time: ${myEvents['eventTime']}'),
-                ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            TableCalendar(
+              firstDay: DateTime(2022),
+              lastDay: DateTime(2024, 12, 31),
+              focusedDay: _focusedDay,
+              calendarFormat: _calendarFormat,
+              onDaySelected: (selectedDay, focusedDay) {
+                if (!isSameDay(_selectedDate, selectedDay)) {
+                  setState(() {
+                    _selectedDate = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                }
+              },
+              selectedDayPredicate: (day) {
+                return isSameDay(_selectedDate, day);
+              },
+              onFormatChanged: (format) {
+                if (_calendarFormat != format) {
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                }
+              },
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
+              },
+              eventLoader: _listOfDayEvents,
+            ),
+            ..._listOfDayEvents(_selectedDate!).map(
+              (myEvents) => ListTile(
+                onTap: () => _showEditDeleteEventDialog(myEvents),
+                leading: const Icon(
+                  Icons.done,
+                  color: Colors.teal,
+                ),
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text('Event Title:   ${myEvents['eventTitle']}'),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Description:   ${myEvents['eventDescp']}'),
+                    Text('Time: ${myEvents['eventTime']}'),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddEventDialog(),
@@ -285,47 +289,49 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
           'Add New Event',
           textAlign: TextAlign.center,
         ),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: titleController,
-              textCapitalization: TextCapitalization.words,
-              decoration: const InputDecoration(
-                labelText: 'Title',
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: titleController,
+                textCapitalization: TextCapitalization.words,
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                ),
               ),
-            ),
-            TextField(
-              controller: descpController,
-              textCapitalization: TextCapitalization.words,
-              decoration: const InputDecoration(labelText: 'Description'),
-            ),
-            // Added for event time
-            ListTile(
-              title: Text(
-                _selectedTime != null
-                    ? 'Event Time: ${_selectedTime!.format(context)}'
-                    : 'Select Time',
-                textAlign: TextAlign.center,
+              TextField(
+                controller: descpController,
+                textCapitalization: TextCapitalization.words,
+                decoration: const InputDecoration(labelText: 'Description'),
               ),
-              trailing: IconButton(
-                icon: Icon(Icons.access_time),
-                onPressed: () async {
-                  final TimeOfDay? pickedTime = await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay.now(),
-                  );
+              // Added for event time
+              ListTile(
+                title: Text(
+                  _selectedTime != null
+                      ? 'Event Time: ${_selectedTime!.format(context)}'
+                      : 'Select Time',
+                  textAlign: TextAlign.center,
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.access_time),
+                  onPressed: () async {
+                    final TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
 
-                  if (pickedTime != null && pickedTime != _selectedTime) {
-                    setState(() {
-                      _selectedTime = pickedTime;
-                    });
-                  }
-                },
+                    if (pickedTime != null && pickedTime != _selectedTime) {
+                      setState(() {
+                        _selectedTime = pickedTime;
+                      });
+                    }
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         actions: [
           TextButton(

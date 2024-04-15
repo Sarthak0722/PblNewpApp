@@ -85,59 +85,61 @@ class _PomodoroState extends State<Pomodoro> {
         ),
       ),
       //BODY
-      body: Container(
-        alignment: Alignment.topCenter,
-        child: currentstate == 'FOCUS'
-            ? AnimateGradient(
-                primaryColors: const [
-                  Color.fromARGB(255, 252, 181, 218),
-                  Color.fromARGB(255, 248, 136, 174),
-                  // Colors.white,
-                ],
-                secondaryColors: const [
-                  // Colors.white,
-                  Color.fromARGB(255, 232, 159, 245),
-                  Color.fromARGB(255, 228, 136, 244),
-                ],
-                child: Expanded(
-                  child: Column(
-                    children: [
-                      timercard(),
-                      const SizedBox(height: 25),
-                      timeroptions(),
-                      const SizedBox(height: 50),
-                      timecontroller(),
-                      const SizedBox(height: 170),
-                      progress(),
-                    ],
+      body: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.topCenter,
+          child: currentstate == 'FOCUS'
+              ? AnimateGradient(
+                  primaryColors: const [
+                    Color.fromARGB(255, 252, 181, 218),
+                    Color.fromARGB(255, 248, 136, 174),
+                    // Colors.white,
+                  ],
+                  secondaryColors: const [
+                    // Colors.white,
+                    Color.fromARGB(255, 232, 159, 245),
+                    Color.fromARGB(255, 228, 136, 244),
+                  ],
+                  child: Expanded(
+                    child: Column(
+                      children: [
+                        timercard(),
+                        const SizedBox(height: 25),
+                        timeroptions(),
+                        const SizedBox(height: 50),
+                        timecontroller(),
+                        const SizedBox(height: 170),
+                        progress(),
+                      ],
+                    ),
+                  ),
+                )
+              : AnimateGradient(
+                  primaryColors: const [
+                    Colors.blue,
+                    Colors.blueAccent,
+                    Colors.white,
+                  ],
+                  secondaryColors: const [
+                    Colors.white,
+                    Colors.lightBlue,
+                    Colors.lightBlueAccent,
+                  ],
+                  child: Expanded(
+                    child: Column(
+                      children: [
+                        timercard(),
+                        const SizedBox(height: 50),
+                        timeroptions(),
+                        const SizedBox(height: 50),
+                        timecontroller(),
+                        const SizedBox(height: 170),
+                        progress(),
+                      ],
+                    ),
                   ),
                 ),
-              )
-            : AnimateGradient(
-                primaryColors: const [
-                  Colors.blue,
-                  Colors.blueAccent,
-                  Colors.white,
-                ],
-                secondaryColors: const [
-                  Colors.white,
-                  Colors.lightBlue,
-                  Colors.lightBlueAccent,
-                ],
-                child: Expanded(
-                  child: Column(
-                    children: [
-                      timercard(),
-                      const SizedBox(height: 50),
-                      timeroptions(),
-                      const SizedBox(height: 50),
-                      timecontroller(),
-                      const SizedBox(height: 170),
-                      progress(),
-                    ],
-                  ),
-                ),
-              ),
+        ),
       ),
     );
   }

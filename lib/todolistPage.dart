@@ -100,7 +100,10 @@ class _ToDoListPageState extends State<ToDoListPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('To-Do List'),
+        title: const Text(
+          'To-Do List',
+          style: TextStyle(fontFamily: 'school', fontSize: 40),
+        ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -171,7 +174,10 @@ class _ToDoListPageState extends State<ToDoListPage> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                fontFamily: 'school',
+                fontSize: 40,
+                fontWeight: FontWeight.bold),
           ),
         ),
         ListView.builder(
@@ -183,15 +189,20 @@ class _ToDoListPageState extends State<ToDoListPage> {
               elevation: 3,
               shadowColor: Colors.grey,
               child: ListTile(
-                title: Text(task.title),
+                title: Text(task.title,
+                    style: TextStyle(fontFamily: 'school', fontSize: 33)),
                 subtitle: task.dueDate != null
                     ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              'Due Date: ${DateFormat('dd-MM-yyyy').format(task.dueDate!)}'),
+                              'Due Date: ${DateFormat('dd-MM-yyyy').format(task.dueDate!)}',
+                              style: TextStyle(
+                                  fontFamily: 'school', fontSize: 30)),
                           if (task.dueTime != null)
-                            Text('Due Time: ${task.dueTime!.format(context)}'),
+                            Text('Due Time: ${task.dueTime!.format(context)}',
+                                style: TextStyle(
+                                    fontFamily: 'school', fontSize: 27)),
                         ],
                       )
                     : null,
@@ -307,7 +318,8 @@ class _TaskDialogState extends State<TaskDialog> {
         child: Column(children: [
           const SizedBox(height: 120),
           AlertDialog(
-            title: Text(widget.task == null ? 'Add Task' : 'Edit Task'),
+            title: Text(widget.task == null ? 'Add Task' : 'Edit Task',
+                style: TextStyle(fontFamily: 'school', fontSize: 30)),
             content: Form(
               key: _formKey,
               child: Column(
@@ -315,7 +327,10 @@ class _TaskDialogState extends State<TaskDialog> {
                 children: [
                   TextFormField(
                     controller: _titleController,
-                    decoration: const InputDecoration(labelText: 'Task Title'),
+                    decoration: const InputDecoration(
+                        labelText: 'Task Title',
+                        labelStyle:
+                            TextStyle(fontFamily: 'school', fontSize: 30)),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a title';
@@ -326,7 +341,8 @@ class _TaskDialogState extends State<TaskDialog> {
                   const SizedBox(height: 16),
                   Row(
                     children: [
-                      const Text('Due Date: '),
+                      const Text('Due Date: ',
+                          style: TextStyle(fontFamily: 'school', fontSize: 20)),
                       TextButton(
                         onPressed: () async {
                           DateTime? pickedDate = await showDatePicker(
@@ -341,16 +357,20 @@ class _TaskDialogState extends State<TaskDialog> {
                             });
                           }
                         },
-                        child: Text(_dueDate == null
-                            ? 'Select Due Date'
-                            : '${DateFormat('dd-MM-yyyy').format(_dueDate!)}'),
+                        child: Text(
+                            _dueDate == null
+                                ? 'Select Due Date'
+                                : '${DateFormat('dd-MM-yyyy').format(_dueDate!)}',
+                            style:
+                                TextStyle(fontFamily: 'school', fontSize: 20)),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   Row(
                     children: [
-                      const Text('Due Time: '),
+                      const Text('Due Time: ',
+                          style: TextStyle(fontFamily: 'school', fontSize: 20)),
                       TextButton(
                         onPressed: () async {
                           TimeOfDay? pickedTime =
@@ -361,9 +381,12 @@ class _TaskDialogState extends State<TaskDialog> {
                             });
                           }
                         },
-                        child: Text(_dueTime == null
-                            ? 'Select Due Time'
-                            : '${_dueTime!.hourOfPeriod}:${_dueTime!.minute} ${_dueTime!.period == DayPeriod.am ? 'AM' : 'PM'}'),
+                        child: Text(
+                            _dueTime == null
+                                ? 'Select Due Time'
+                                : '${_dueTime!.hourOfPeriod}:${_dueTime!.minute} ${_dueTime!.period == DayPeriod.am ? 'AM' : 'PM'}',
+                            style:
+                                TextStyle(fontFamily: 'school', fontSize: 20)),
                       ),
                     ],
                   ),
@@ -383,6 +406,7 @@ class _TaskDialogState extends State<TaskDialog> {
                     }).toList(),
                     decoration: const InputDecoration(
                       labelText: 'Priority',
+                      labelStyle: TextStyle(fontFamily: 'school', fontSize: 20),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -394,7 +418,8 @@ class _TaskDialogState extends State<TaskDialog> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Cancel'),
+                child: const Text('Cancel',
+                    style: TextStyle(fontFamily: 'school', fontSize: 30)),
               ),
               TextButton(
                 onPressed: () {
@@ -411,7 +436,8 @@ class _TaskDialogState extends State<TaskDialog> {
                     );
                   }
                 },
-                child: Text(widget.task == null ? 'Add' : 'Update'),
+                child: Text(widget.task == null ? 'Add' : 'Update',
+                    style: TextStyle(fontFamily: 'school', fontSize: 30)),
               ),
             ],
           ),

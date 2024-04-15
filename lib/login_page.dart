@@ -44,17 +44,17 @@ class _loginScreenState extends State<loginScreen> {
                       "assets/images/pic.png",
                       height: ht * 0.2,
                     ),
-                    SizedBox(height: ht * 0.04),
+                    SizedBox(height: ht * 0.003),
                     Text(
                       "Login",
                       style: TextStyle(
                         fontFamily: "school",
-                        fontSize: wd * 0.09,
+                        fontSize: wd * 0.3,
                         color: Color.fromARGB(207, 132, 0, 255),
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: wd * 0.07),
+                    SizedBox(height: wd * 0.03),
                     Material(
                       elevation: wd * 0.02,
                       child: TextField(
@@ -163,8 +163,10 @@ class _loginScreenState extends State<loginScreen> {
                             : Text(
                                 "Login",
                                 style: TextStyle(
-                                    color: Color.fromARGB(255, 105, 0,
-                                        252)), // Set the text color to purple
+                                    color: Color.fromARGB(255, 105, 0, 252),
+                                    fontFamily: 'school',
+                                    fontSize:
+                                        40), // Set the text color to purple
                               ), // Show loading indicator when loading
                       ),
                     ),
